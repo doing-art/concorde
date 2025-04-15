@@ -33,3 +33,9 @@
 
 # Ide
 .vs
+
+# Artifacts
+x32
+x64
+Debug
+concorde

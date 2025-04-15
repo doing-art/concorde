@@ -18,5 +18,13 @@
     <ClCompile Include="concorde.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="storage\RedBlackTree.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="storage\RedBlackTree.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
