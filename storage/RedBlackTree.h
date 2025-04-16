@@ -18,6 +18,7 @@ public:
 
 private:
 	TreeNode* root{};
+	void rotateLeft(TreeNode* node);
 };
 
 #endif

@@ -49,3 +49,24 @@ void RedBlackTree::printInorder() {
 
 	std::cout << '\n';
 }
+
+void RedBlackTree::rotateLeft(TreeNode* node) {
+	TreeNode* right = node->right;
+	TreeNode* parent = node->parent;
+	
+	if (!right) return;
+
+	if (parent) {
+		if (parent->left == node) parent->left = right;
+		if (parent->right == node) parent->right = right;
+		right->parent = parent;
+	} else {
+		root = right;
+		right->parent = nullptr;
+	}
+
+	node->right = right->left;
+	node->right->parent = node;
+	right->left = node;
+	node->parent = right;
+}
