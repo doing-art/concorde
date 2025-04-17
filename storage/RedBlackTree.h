@@ -16,9 +16,11 @@ public:
 	void insert(int value);
 	void printInorder();
 
-private:
 	TreeNode* root{};
 	void rotateLeft(TreeNode* node);
+	void rotateRight(TreeNode* node);
+
+private:
 };
 
 #endif

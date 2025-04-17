@@ -64,9 +64,29 @@ void RedBlackTree::rotateLeft(TreeNode* node) {
 		root = right;
 		right->parent = nullptr;
 	}
-
 	node->right = right->left;
 	node->right->parent = node;
 	right->left = node;
 	node->parent = right;
 }
+
+void RedBlackTree::rotateRight(TreeNode* node) {
+	TreeNode* left = node->left;
+	TreeNode* parent = node->parent;
+
+	if (!left) return;
+
+	if (parent) {
+		if (parent->left == node) parent->left = left;
+		if (parent->right == node) parent->right = left;
+		left->parent = parent;
+	}
+	else {
+		root = left;
+		left->parent = nullptr;
+	}
+	node->left = left->right;
+	node->left->parent = node;
+	left->right = node;
+	node->parent = left;
+};
