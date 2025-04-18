@@ -29,6 +29,8 @@ void RedBlackTree::insert(int value) {
 	} else {
 		parent->right = newNode;
 	}
+
+	fixInsertion(newNode);
 }
 
 void RedBlackTree::printInorder() {
@@ -89,4 +91,46 @@ void RedBlackTree::rotateRight(TreeNode* node) {
 	node->left->parent = node;
 	left->right = node;
 	node->parent = left;
+};
+
+void RedBlackTree::fixInsertion(TreeNode* node) {
+	while (node->color == red && node->parent->color == red) {
+		TreeNode* parent = node->parent;
+		TreeNode* grandParent = parent->parent;
+
+		if (grandParent->left == parent) {
+			TreeNode* uncle = grandParent->right;
+
+			if (uncle->color == red) {
+				grandParent->color = red;
+				uncle->color = black;
+				parent->color = black;
+			} else {
+				if (node == parent->left) {
+					parent->color = black;
+					grandParent->color = red;
+					rotateRight(grandParent);
+				} else {
+					rotateLeft(parent);
+				}
+			}
+		} else {
+			TreeNode* uncle = grandParent->left;
+
+			if (uncle->color == red) {
+				grandParent->color = red;
+				uncle->color = black;
+				parent->color = black;
+			} else {
+				if (node == parent->right) {
+					parent->color = black;
+					grandParent->color = red;
+					rotateLeft(grandParent);
+				}
+				else {
+					rotateRight(parent);
+				}
+			}
+		}
+	}
 };

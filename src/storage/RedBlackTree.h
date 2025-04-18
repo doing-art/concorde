@@ -3,24 +3,29 @@
 
 class RedBlackTree {
 public:
+	enum Color {
+		red,
+		black
+	};
+
 	struct TreeNode {
 		int value{};
-		bool color{};
+		Color color{};
 		TreeNode* parent{};
 		TreeNode* left{};
 		TreeNode* right{};
 
-		TreeNode(int newValue, bool newColor = false) :value{ newValue }, color{ newColor } { }
+		TreeNode(int newValue, Color newColor = red) :value{ newValue }, color{ newColor } { }
 	};
 
 	void insert(int value);
 	void printInorder();
 
+private:
 	TreeNode* root{};
 	void rotateLeft(TreeNode* node);
 	void rotateRight(TreeNode* node);
-
-private:
+	void fixInsertion(TreeNode* node);
 };
 
 #endif
