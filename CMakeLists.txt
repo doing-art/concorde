@@ -1,10 +1,10 @@
 cmake_minimum_required(VERSION 3.27)
 project(concorde)
 
-# C++20 Standard
+# Set cmake variables
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Collect source files (excluding tests)
 file(GLOB_RECURSE SRC_FILES CONFIGURE_DEPENDS src/*.cc src/*.h)
@@ -44,6 +44,13 @@ file(GLOB_RECURSE ALL_SRC_FILES CONFIGURE_DEPENDS src/*.cc src/*.h)
 add_custom_target(
     clang-format
     COMMAND clang-format -i -style=file ${ALL_SRC_FILES}
-    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
     COMMENT "Running clang-format on source files"
+)
+
+# Configure Clang Tidy
+add_custom_target(
+    clang-tidy
+    COMMAND clang-tidy -p ${CMAKE_BINARY_DIR} -header-filter='src/.*' ${ALL_SRC_FILES}
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
 )

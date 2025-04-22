@@ -56,6 +56,14 @@
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release"
             }
+        },
+        {
+            "name": "clang-tidy",
+            "hidden": false,
+            "generator": "Ninja",
+            "cacheVariables": {
+                "CMAKE_CXX_CLANG_TIDY": "clang-tidy"
+            }
         }
     ]
 }
