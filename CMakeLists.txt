@@ -10,14 +10,18 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Collect source files (excluding tests)
 file(GLOB_RECURSE SRC_FILES CONFIGURE_DEPENDS src/*.cc src/*.h)
-
+set(MAIN_FILE "")
 foreach(file ${SRC_FILES})
     if(file MATCHES "_test.cc$")
         list(REMOVE_ITEM SRC_FILES ${file})
     endif()
+    if(file MATCHES "concorde\\.cc$")
+        set(MAIN_FILE ${file})
+        list(REMOVE_ITEM SRC_FILES ${file})
+    endif()
 endforeach()
 
-add_executable(concorde ${SRC_FILES})
+add_executable(concorde ${SRC_FILES} ${MAIN_FILE})
 
 
 # GoogleTest setup
@@ -35,7 +39,7 @@ FetchContent_MakeAvailable(googletest)
 enable_testing()
 file(GLOB_RECURSE UNIT_TEST_FILES CONFIGURE_DEPENDS "src/*_test.cc")
 
-add_executable(concorde_test ${UNIT_TEST_FILES})
+add_executable(concorde_test ${UNIT_TEST_FILES} ${SRC_FILES})
 target_link_libraries(concorde_test GTest::gtest_main)
 
 include(GoogleTest)
@@ -43,7 +47,6 @@ gtest_discover_tests(concorde_test)
 
 
 # Configure Clang Format
-file(GLOB_RECURSE ALL_SRC_FILES CONFIGURE_DEPENDS src/*.cc src/*.h)
 add_custom_target(
     clang-format
     COMMAND clang-format -i -style=file ${ALL_SRC_FILES}
