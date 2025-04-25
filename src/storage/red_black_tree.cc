@@ -1,13 +1,13 @@
 #include "red_black_tree.h"
 
-#include <iostream>
-#include <vector>
-
 void RedBlackTree::insert(int value) {
   TreeNode* newNode = new TreeNode(value);
 
+  size++;
+
   if (!root) {
     root = newNode;
+    fixInsertion(newNode);
     return;
   }
 
@@ -34,9 +34,11 @@ void RedBlackTree::insert(int value) {
   fixInsertion(newNode);
 }
 
-void RedBlackTree::printInorder() {
+std::vector<int> RedBlackTree::inorder() {
   TreeNode* current{root};
   std::vector<TreeNode*> stack{};
+  std::vector<int> result(size);
+  int i = 0;
 
   while (!stack.empty() || current) {
     if (current) {
@@ -45,12 +47,13 @@ void RedBlackTree::printInorder() {
     } else {
       current = stack.back();
       stack.pop_back();
-      std::cout << current->value << ' ';
+      result[i] = current->value;
       current = current->right;
+      i++;
     }
   }
 
-  std::cout << '\n';
+  return result;
 }
 
 void RedBlackTree::rotateLeft(TreeNode* node) {
@@ -68,7 +71,9 @@ void RedBlackTree::rotateLeft(TreeNode* node) {
     right->parent = nullptr;
   }
   node->right = right->left;
-  node->right->parent = node;
+  if (node->right) {
+    node->right->parent = node;
+  }
   right->left = node;
   node->parent = right;
 }
@@ -88,23 +93,26 @@ void RedBlackTree::rotateRight(TreeNode* node) {
     left->parent = nullptr;
   }
   node->left = left->right;
-  node->left->parent = node;
+  if (node->left) {
+    node->left->parent = node;
+  }
   left->right = node;
   node->parent = left;
 };
 
 void RedBlackTree::fixInsertion(TreeNode* node) {
-  while (node->color == red && node->parent->color == red) {
+  while (node != root && node->color == red && node->parent->color == red) {
     TreeNode* parent = node->parent;
     TreeNode* grandParent = parent->parent;
 
     if (grandParent->left == parent) {
       TreeNode* uncle = grandParent->right;
 
-      if (uncle->color == red) {
+      if (uncle && uncle->color == red) {
         grandParent->color = red;
         uncle->color = black;
         parent->color = black;
+        node = grandParent;
       } else {
         if (node == parent->left) {
           parent->color = black;
@@ -112,15 +120,17 @@ void RedBlackTree::fixInsertion(TreeNode* node) {
           rotateRight(grandParent);
         } else {
           rotateLeft(parent);
+          node = parent;
         }
       }
     } else {
       TreeNode* uncle = grandParent->left;
 
-      if (uncle->color == red) {
+      if (uncle && uncle->color == red) {
         grandParent->color = red;
         uncle->color = black;
         parent->color = black;
+        node = grandParent;
       } else {
         if (node == parent->right) {
           parent->color = black;
@@ -128,8 +138,11 @@ void RedBlackTree::fixInsertion(TreeNode* node) {
           rotateLeft(grandParent);
         } else {
           rotateRight(parent);
+          node = parent;
         }
       }
     }
   }
+
+  root->color = black;
 };

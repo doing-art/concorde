@@ -1,6 +1,10 @@
 #ifndef RED_BLACK_TREE_H
 #define RED_BLACK_TREE_H
 
+#include <vector>
+
+class RedBlackTreeTest;
+
 class RedBlackTree {
  public:
   enum Color { red, black };
@@ -17,10 +21,14 @@ class RedBlackTree {
   };
 
   void insert(int value);
-  void printInorder();
+  std::vector<int> inorder();
+
+  friend class RedBlackTreeTest;
 
  private:
   TreeNode* root{};
+  int size{};
+
   void rotateLeft(TreeNode* node);
   void rotateRight(TreeNode* node);
   void fixInsertion(TreeNode* node);

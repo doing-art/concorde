@@ -40,7 +40,12 @@ enable_testing()
 file(GLOB_RECURSE UNIT_TEST_FILES CONFIGURE_DEPENDS "src/*_test.cc")
 
 add_executable(concorde_test ${UNIT_TEST_FILES} ${SRC_FILES})
-target_link_libraries(concorde_test GTest::gtest_main)
+target_link_libraries(
+    concorde_test   
+    GTest::gtest
+    GTest::gmock
+    GTest::gtest_main
+)
 
 include(GoogleTest)
 gtest_discover_tests(concorde_test)
