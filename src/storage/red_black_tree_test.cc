@@ -60,3 +60,16 @@ TEST_F(RedBlackTreeTest, CheckMassiveInsertion) {
   EXPECT_TRUE(validate());
   EXPECT_THAT(tree.inorder(), testing::ContainerEq(expected));
 }
+
+TEST_F(RedBlackTreeTest, CheckContains) {
+  std::vector<int> input{50, 30, 70, 60, 80, 90, 100, 75, 95,
+                         98, 97, 10, 20, 5,  3,  25,  24};
+  for (auto val : input) {
+    tree.insert(val);
+  }
+  EXPECT_TRUE(tree.contains(97));
+  EXPECT_TRUE(tree.contains(5));
+  EXPECT_TRUE(tree.contains(24));
+  EXPECT_FALSE(tree.contains(101));
+  EXPECT_FALSE(tree.contains(92));
+}

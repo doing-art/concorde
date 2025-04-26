@@ -7,6 +7,13 @@ class RedBlackTreeTest;
 
 class RedBlackTree {
  public:
+  void insert(int value);
+  bool contains(int value);
+  std::vector<int> inorder();
+
+  friend class RedBlackTreeTest;
+
+ private:
   enum Color { red, black };
 
   struct TreeNode {
@@ -20,18 +27,13 @@ class RedBlackTree {
         : value{newValue}, color{newColor} {}
   };
 
-  void insert(int value);
-  std::vector<int> inorder();
-
-  friend class RedBlackTreeTest;
-
- private:
   TreeNode* root{};
   int size{};
 
   void rotateLeft(TreeNode* node);
   void rotateRight(TreeNode* node);
   void fixInsertion(TreeNode* node);
+  TreeNode* find(int value);
 };
 
 #endif

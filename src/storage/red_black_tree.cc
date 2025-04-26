@@ -146,3 +146,21 @@ void RedBlackTree::fixInsertion(TreeNode* node) {
 
   root->color = black;
 };
+
+RedBlackTree::TreeNode* RedBlackTree::find(int value) {
+  TreeNode* current = root;
+
+  while (current) {
+    if (current->value < value) {
+      current = current->right;
+    } else if (current->value > value) {
+      current = current->left;
+    } else {
+      return current;
+    }
+  }
+
+  return nullptr;
+}
+
+bool RedBlackTree::contains(int value) { return find(value); }
