@@ -10,6 +10,7 @@ class RedBlackTree {
   RedBlackTree();
   void insert(int value);
   bool contains(int value);
+  void remove(int value);
   std::vector<int> inorder();
 
   friend class RedBlackTreeTest;
@@ -35,6 +36,8 @@ class RedBlackTree {
   void rotateLeft(TreeNode* node);
   void rotateRight(TreeNode* node);
   void fixInsertion(TreeNode* node);
+  void transplant(TreeNode* nodeToRemove, TreeNode* node);
+  TreeNode* minimum(TreeNode* node);
   TreeNode* find(int value);
 };
 

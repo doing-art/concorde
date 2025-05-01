@@ -151,7 +151,7 @@ void RedBlackTree::fixInsertion(TreeNode* node) {
 RedBlackTree::TreeNode* RedBlackTree::find(int value) {
   TreeNode* current = root;
 
-  while (current) {
+  while (current != nil) {
     if (current->value < value) {
       current = current->right;
     } else if (current->value > value) {
@@ -161,7 +161,60 @@ RedBlackTree::TreeNode* RedBlackTree::find(int value) {
     }
   }
 
-  return nullptr;
+  return current;
 }
 
 bool RedBlackTree::contains(int value) { return find(value); }
+
+void RedBlackTree::transplant(TreeNode* nodeToRemove, TreeNode* node) {
+  if (!nodeToRemove->parent) {
+    root = node;
+  } else if (nodeToRemove->parent->left == nodeToRemove) {
+    nodeToRemove->parent->left = node;
+  } else {
+    nodeToRemove->parent->right = node;
+  }
+
+  node->parent = nodeToRemove->parent;
+}
+
+RedBlackTree::TreeNode* RedBlackTree::minimum(TreeNode* node) {
+  while (node->left) {
+    node = node->left;
+  }
+  return node;
+}
+
+void RedBlackTree::remove(int value) {
+  TreeNode* nodeToRemove = find(value);
+  TreeNode* nodeToFix{};
+  Color originalColor = nodeToRemove->color;
+
+  if (nodeToRemove == nil) {
+    return;
+  }
+
+  if (nodeToRemove->left == nil) {
+    nodeToFix = nodeToRemove->right;
+    transplant(nodeToRemove, nodeToFix);
+  } else if (nodeToRemove->right == nil) {
+    nodeToFix = nodeToRemove->left;
+    transplant(nodeToRemove, nodeToFix);
+  } else {
+    TreeNode* min = minimum(nodeToRemove->right);
+    nodeToFix = min->right;
+    originalColor = min->color;
+    if (min != nodeToRemove->left) {
+      transplant(min, nodeToFix);
+      min->left = nodeToRemove->left;
+      min->left->parent = min;
+    } else {
+      nodeToFix->parent = min;
+    }
+    transplant(nodeToRemove, min);
+    min->right = nodeToRemove->right;
+    min->right->parent = min;
+  }
+
+  delete nodeToRemove;
+}
