@@ -7,6 +7,7 @@ class RedBlackTreeTest;
 
 class RedBlackTree {
  public:
+  RedBlackTree();
   void insert(int value);
   bool contains(int value);
   std::vector<int> inorder();
@@ -27,6 +28,7 @@ class RedBlackTree {
         : value{newValue}, color{newColor} {}
   };
 
+  TreeNode* nil{};
   TreeNode* root{};
   int size{};
 
