@@ -103,44 +103,39 @@ void RedBlackTree::rotateRight(TreeNode* node) {
 
 void RedBlackTree::fixInsertion(TreeNode* node) {
   while (node != root && node->color == red && node->parent->color == red) {
-    TreeNode* parent = node->parent;
-    TreeNode* grandParent = parent->parent;
-
-    if (grandParent->left == parent) {
-      TreeNode* uncle = grandParent->right;
+    if (node->parent->parent->left == node->parent) {
+      TreeNode* uncle = node->parent->parent->right;
 
       if (uncle->color == red) {
-        grandParent->color = red;
+        node->parent->parent->color = red;
         uncle->color = black;
-        parent->color = black;
-        node = grandParent;
+        node->parent->color = black;
+        node = node->parent->parent;
       } else {
-        if (node == parent->left) {
-          parent->color = black;
-          grandParent->color = red;
-          rotateRight(grandParent);
-        } else {
-          rotateLeft(parent);
-          node = parent;
+        if (node == node->parent->right) {
+          node = node->parent;
+          rotateLeft(node);
         }
+        node->parent->color = black;
+        node->parent->parent->color = red;
+        rotateRight(node->parent->parent);
       }
     } else {
-      TreeNode* uncle = grandParent->left;
+      TreeNode* uncle = node->parent->parent->left;
 
       if (uncle->color == red) {
-        grandParent->color = red;
+        node->parent->parent->color = red;
         uncle->color = black;
-        parent->color = black;
-        node = grandParent;
+        node->parent->color = black;
+        node = node->parent->parent;
       } else {
-        if (node == parent->right) {
-          parent->color = black;
-          grandParent->color = red;
-          rotateLeft(grandParent);
-        } else {
-          rotateRight(parent);
-          node = parent;
+        if (node == node->parent->left) {
+          node = node->parent;
+          rotateRight(node);
         }
+        node->parent->color = black;
+        node->parent->parent->color = red;
+        rotateLeft(node->parent->parent);
       }
     }
   }
