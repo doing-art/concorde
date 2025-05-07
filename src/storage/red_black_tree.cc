@@ -2,8 +2,8 @@
 
 RedBlackTree::RedBlackTree() {
   nil = new TreeNode(0, black);
-  nil->left = 0;
-  nil->right = 0;
+  nil->left = nil;
+  nil->right = nil;
   root = nil;
 }
 
@@ -164,7 +164,7 @@ RedBlackTree::TreeNode* RedBlackTree::find(int value) {
   return current;
 }
 
-bool RedBlackTree::contains(int value) { return find(value); }
+bool RedBlackTree::contains(int value) { return find(value) != nil; }
 
 void RedBlackTree::transplant(TreeNode* nodeToRemove, TreeNode* node) {
   if (!nodeToRemove->parent) {
@@ -179,7 +179,7 @@ void RedBlackTree::transplant(TreeNode* nodeToRemove, TreeNode* node) {
 }
 
 RedBlackTree::TreeNode* RedBlackTree::minimum(TreeNode* node) {
-  while (node->left) {
+  while (node->left != nil) {
     node = node->left;
   }
   return node;
@@ -204,17 +204,78 @@ void RedBlackTree::remove(int value) {
     TreeNode* min = minimum(nodeToRemove->right);
     nodeToFix = min->right;
     originalColor = min->color;
-    if (min != nodeToRemove->left) {
+    if (min->parent != nodeToRemove) {
       transplant(min, nodeToFix);
-      min->left = nodeToRemove->left;
-      min->left->parent = min;
+      min->right = nodeToRemove->right;
+      min->right->parent = min;
     } else {
       nodeToFix->parent = min;
     }
     transplant(nodeToRemove, min);
-    min->right = nodeToRemove->right;
-    min->right->parent = min;
+    min->left = nodeToRemove->left;
+    min->left->parent = min;
+    min->color = nodeToRemove->color;
   }
 
   delete nodeToRemove;
+  size--;
+
+  if (originalColor == black) {
+    fixRemoval(nodeToFix);
+  }
+}
+
+void RedBlackTree::fixRemoval(TreeNode* node) {
+  while (node != root && node->color == black) {
+    if (node == node->parent->left) {
+      TreeNode* sibling = node->parent->right;
+      if (sibling->color == red) {
+        sibling->color = black;
+        node->parent->color = red;
+        rotateLeft(node->parent);
+        sibling = node->parent->right;
+      }
+      if (sibling->left->color == black && sibling->right->color == black) {
+        sibling->color = red;
+        node = node->parent;
+      } else {
+        if (sibling->right->color == black) {
+          sibling->left->color = black;
+          sibling->color = red;
+          rotateRight(sibling);
+          sibling = node->parent->right;
+        }
+        sibling->color = node->parent->color;
+        node->parent->color = black;
+        sibling->right->color = black;
+        rotateLeft(node->parent);
+        node = root;
+      }
+    } else {
+      TreeNode* sibling = node->parent->left;
+      if (sibling->color == red) {
+        sibling->color = black;
+        node->parent->color = red;
+        rotateRight(node->parent);
+        sibling = node->parent->left;
+      }
+      if (sibling->right->color == black && sibling->left->color == black) {
+        sibling->color = red;
+        node = node->parent;
+      } else {
+        if (sibling->left->color == black) {
+          sibling->right->color = black;
+          sibling->color = red;
+          rotateLeft(sibling);
+          sibling = node->parent->left;
+        }
+        sibling->color = node->parent->color;
+        node->parent->color = black;
+        sibling->left->color = black;
+        rotateRight(node->parent);
+        node = root;
+      }
+    }
+  }
+  node->color = black;
 }

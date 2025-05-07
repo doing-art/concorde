@@ -36,6 +36,7 @@ class RedBlackTree {
   void rotateLeft(TreeNode* node);
   void rotateRight(TreeNode* node);
   void fixInsertion(TreeNode* node);
+  void fixRemoval(TreeNode* node);
   void transplant(TreeNode* nodeToRemove, TreeNode* node);
   TreeNode* minimum(TreeNode* node);
   TreeNode* find(int value);
