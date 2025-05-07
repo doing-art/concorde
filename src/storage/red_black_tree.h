@@ -8,9 +8,9 @@ class RedBlackTreeTest;
 class RedBlackTree {
  public:
   RedBlackTree();
-  void insert(int value);
-  bool contains(int value);
-  void remove(int value);
+  void insert(int key);
+  bool contains(int key);
+  void remove(int key);
   std::vector<int> inorder();
 
   friend class RedBlackTreeTest;
@@ -19,14 +19,14 @@ class RedBlackTree {
   enum Color { red, black };
 
   struct TreeNode {
-    int value{};
+    int key{};
     Color color{};
     TreeNode* parent{};
     TreeNode* left{};
     TreeNode* right{};
 
-    TreeNode(int newValue, Color newColor = red)
-        : value{newValue}, color{newColor} {}
+    TreeNode(int newkey, Color newColor = red)
+        : key{newkey}, color{newColor} {}
   };
 
   TreeNode* nil{};
@@ -39,7 +39,7 @@ class RedBlackTree {
   void fixRemoval(TreeNode* node);
   void transplant(TreeNode* nodeToRemove, TreeNode* node);
   TreeNode* minimum(TreeNode* node);
-  TreeNode* find(int value);
+  TreeNode* find(int key);
 };
 
 #endif

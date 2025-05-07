@@ -7,8 +7,8 @@ RedBlackTree::RedBlackTree() {
   root = nil;
 }
 
-void RedBlackTree::insert(int value) {
-  TreeNode* newNode = new TreeNode(value);
+void RedBlackTree::insert(int key) {
+  TreeNode* newNode = new TreeNode(key);
   TreeNode* parent{};
   TreeNode* current{root};
   newNode->left = nil;
@@ -18,9 +18,9 @@ void RedBlackTree::insert(int value) {
 
   while (current != nil) {
     parent = current;
-    if (current->value > value) {
+    if (current->key > key) {
       current = current->left;
-    } else if (current->value < value) {
+    } else if (current->key < key) {
       current = current->right;
     } else {
       return;
@@ -30,7 +30,7 @@ void RedBlackTree::insert(int value) {
   newNode->parent = parent;
   if (parent == nullptr) {
     root = newNode;
-  } else if (parent->value > value) {
+  } else if (parent->key > key) {
     parent->left = newNode;
   } else {
     parent->right = newNode;
@@ -52,7 +52,7 @@ std::vector<int> RedBlackTree::inorder() {
     } else {
       current = stack.back();
       stack.pop_back();
-      result[i] = current->value;
+      result[i] = current->key;
       current = current->right;
       i++;
     }
@@ -143,13 +143,13 @@ void RedBlackTree::fixInsertion(TreeNode* node) {
   root->color = black;
 };
 
-RedBlackTree::TreeNode* RedBlackTree::find(int value) {
+RedBlackTree::TreeNode* RedBlackTree::find(int key) {
   TreeNode* current = root;
 
   while (current != nil) {
-    if (current->value < value) {
+    if (current->key < key) {
       current = current->right;
-    } else if (current->value > value) {
+    } else if (current->key > key) {
       current = current->left;
     } else {
       return current;
@@ -159,7 +159,7 @@ RedBlackTree::TreeNode* RedBlackTree::find(int value) {
   return current;
 }
 
-bool RedBlackTree::contains(int value) { return find(value) != nil; }
+bool RedBlackTree::contains(int key) { return find(key) != nil; }
 
 void RedBlackTree::transplant(TreeNode* nodeToRemove, TreeNode* node) {
   if (!nodeToRemove->parent) {
@@ -180,8 +180,8 @@ RedBlackTree::TreeNode* RedBlackTree::minimum(TreeNode* node) {
   return node;
 }
 
-void RedBlackTree::remove(int value) {
-  TreeNode* nodeToRemove = find(value);
+void RedBlackTree::remove(int key) {
+  TreeNode* nodeToRemove = find(key);
   TreeNode* nodeToFix{};
   Color originalColor = nodeToRemove->color;
 
